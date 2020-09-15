@@ -1,0 +1,7 @@
+{
+    "name": "test",
+    "version-string": "dev",
+    "dependencies": [
+        "python3"
+    ]
+}
