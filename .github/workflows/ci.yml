@@ -8,8 +8,8 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "macos-latest"]
-        cmake-defines: ["-DOLD_FINDERS=ON", "-DNEW_FINDERS=ON", "-DNEW_FINDERS=ON -DOLD_FINDERS=ON", "-DOLD_FINDERS=ON -DOLD_FINDERS_WRONG_ORDER=ON"]
-        build-type: ["Debug", "Release"]
+        #cmake-defines: ["-DOLD_FINDERS=ON", "-DNEW_FINDERS=ON", "-DNEW_FINDERS=ON -DOLD_FINDERS=ON", "-DOLD_FINDERS=ON -DOLD_FINDERS_WRONG_ORDER=ON"]
+        #build-type: ["Debug", "Release"]
 
     env:
       VCPKG_FEATURE_FLAGS: binarycaching,manifests
@@ -34,7 +34,6 @@ jobs:
         run: |
           mkdir build && cd build
           cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DVCPKG_MANIFEST_MODE=ON ${{ matrix.cmake-defines }} ..
-          cmake --build .
 
       - name: Upload Failure Logs
         if: failure()
