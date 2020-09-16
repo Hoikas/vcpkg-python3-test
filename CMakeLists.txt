@@ -53,6 +53,12 @@ if(DEFINED NEW_FINDERS)
     message(STATUS "Libraries: ${Python3_LIBRARIES}")
     message(STATUS "Batteries: ${Python3_STDLIB}")
 
+    # Debug link libs
+    get_target_property(DEBUG_IFACE Python3::Python INTERFACE_LINK_LIBRARIES)
+    get_target_property(DEBUG_LIBS Python3::Python LINK_LIBRARIES)
+    message(STATUS "Interface Link: ${DEBUG_IFACE}")
+    message(STATUS "Link Libs: ${DEBUG_LIBS}")
+
     file(TO_CMAKE_PATH ${Python3_STDLIB} DONT_CHOKE_ON_IT)
 
     add_executable(test_newfinders main.cpp)
