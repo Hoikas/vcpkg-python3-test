@@ -3,46 +3,79 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.system.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: ["ubuntu-latest", "macos-latest"]
-        cmake-defines: ["-DOLD_FINDERS=ON", "-DNEW_FINDERS=ON", "-DNEW_FINDERS=ON -DOLD_FINDERS=ON", "-DOLD_FINDERS=ON -DOLD_FINDERS_WRONG_ORDER=ON"]
+        system:
+          - os: ubuntu-latest
+            mono: mono
+            triplet: x64-linux
+          - os: macos-latest
+            mono: mono
+            triplet: x64-osx
+          - os: windows-2016
+            mono: ""
+            triplet: x86-windows
+          - os: windows-2016
+            mono: ""
+            triplet: x64-windows-static
+          - os: windows-2019
+            mono: ""
+            triplet: x64-windows
+          - os: windows-2019
+            mono: ""
+            triplet: x64-windows-static-md
+
         build-type: ["Debug", "Release"]
+        wrong-order: ["OFF", "ON"]
 
     env:
       VCPKG_FEATURE_FLAGS: binarycaching,manifests
       VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-      VCPKG_BINARY_SOURCES: clear;files,${{ github.workspace }}/deps,readwrite
+      VCPKG_BINARY_SOURCES: clear;nuget,GitHub,readwrite
 
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: true
 
-      - name: Restore Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ github.workspace }}/deps
-          key: |
-            ${{ runner.os }} ${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}
+      - name: Bootstrap vcpkg (Windows)
+        if: runner.os == 'Windows'
+        run: ./vcpkg/bootstrap-vcpkg.bat
+      - name: Bootstrap vcpkg (Unix-like)
+        if: runner.os != 'Windows'
+        run: ./vcpkg/bootstrap-vcpkg.sh
+
+      - name: Prepare vcpkg
+        shell: bash
+        run: >
+          ${{ matrix.system.mono }} `./vcpkg/vcpkg fetch nuget | tail -n 1`
+          sources add
+          -source "https://nuget.pkg.github.com/Hoikas/index.json"
+          -storepasswordincleartext
+          -name "GitHub"
+          -username "Hoikas"
+          -password "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Build
+        shell: bash
         run: |
           mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DVCPKG_MANIFEST_MODE=ON ${{ matrix.cmake-defines }} ..
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
+            -VCPKG_TARGET_TRIPLET=${{ matrix.system.triplet }} \
+            -DCMAKE_OLD_FINDERS_WRONG_ORDER=${{ matrix.wrong-order }} \
+            ..
           cmake --build .
 
       - name: Upload Failure Logs
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: LOG ${{ runner.os }} ${{ matrix.build-type }} ${{ matrix.cmake-defines }}
+          name: LOG ${{ runner.os }} ${{ matrix.build-type }} wrong-order=${{ matrix.wrong-order }}
           path: ${{ github.workspace }}/**/*.log
 
-      - name: List Build Directory
-        if: always()
-        run: ls -R build
+      - name: Run Tests
+        run: |
+          cd build
+          ctest

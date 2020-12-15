@@ -14,13 +14,23 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 #  ===========================================================================
 
-if(DEFINED OLD_FINDERS)
-    if(NOT DEFINED OLD_FINDERS_WRONG_ORDER)
+enable_testing()
+
+option(OLD_FINDERS "Build the FindPythonLibs and FindPythonInterp Test" ON)
+option(NEW_FINDERS "Build the FindPython3 Test" ON)
+
+include(CMakeDependentOption)
+cmake_dependent_option(OLD_FINDERS_WRONG_ORDER "Execute the find_package() calls in the wrong order" OFF OLD_FINDERS OFF)
+
+#  ===========================================================================
+
+if(OLD_FINDERS)
+    if(OLD_FINDERS_WRONG_ORDER)
+        find_package(PythonLibs REQUIRED)
         find_package(PythonInterp REQUIRED)
-    endif()
-    find_package(PythonLibs REQUIRED)
-    if(DEFINED OLD_FINDERS_WRONG_ORDER)
+    else()
         find_package(PythonInterp REQUIRED)
+        find_package(PythonLibs REQUIRED)
     endif()
 
     message(STATUS "--- Old finders---")
@@ -39,11 +49,13 @@ if(DEFINED OLD_FINDERS)
     target_link_libraries(test_oldfinders PRIVATE ${PYTHON_LIBRARIES})
     target_include_directories(test_oldfinders PRIVATE ${PYTHON_INCLUDE_DIRS})
     target_compile_definitions(test_oldfinders PRIVATE "BATTERIES=L\"${DONT_CHOKE_ON_IT}\"")
+
+    add_test(NAME oldfinders COMMAND test_oldfinders)
 endif()
 
 #  ===========================================================================
 
-if(DEFINED NEW_FINDERS)
+if(NEW_FINDERS)
     find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 
     message(STATUS "--- New finders---")
@@ -64,4 +76,6 @@ if(DEFINED NEW_FINDERS)
     add_executable(test_newfinders main.cpp)
     target_link_libraries(test_newfinders PRIVATE Python3::Python)
     target_compile_definitions(test_newfinders PRIVATE "BATTERIES=L\"${DONT_CHOKE_ON_IT}\"")
+
+    add_test(NAME newfinders COMMAND test_newfinders)
 endif()
