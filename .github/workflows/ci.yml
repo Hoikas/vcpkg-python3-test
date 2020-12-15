@@ -61,6 +61,7 @@ jobs:
         shell: bash
         run: |
           mkdir build && cd build
+          cmake --version
           cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
             -VCPKG_TARGET_TRIPLET=${{ matrix.system.triplet }} \
             -DCMAKE_OLD_FINDERS_WRONG_ORDER=${{ matrix.wrong-order }} \
