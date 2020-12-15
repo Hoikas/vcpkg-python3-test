@@ -43,7 +43,7 @@ if(OLD_FINDERS)
         OUTPUT_VARIABLE PYTHON_STDLIB
     )
     message(STATUS "Batteries: ${PYTHON_STDLIB}")
-    file(TO_CMAKE_PATH ${PYTHON_STDLIB} DONT_CHOKE_ON_IT)
+    file(TO_CMAKE_PATH "${PYTHON_STDLIB}" DONT_CHOKE_ON_IT)
 
     add_executable(test_oldfinders main.cpp)
     target_link_libraries(test_oldfinders PRIVATE ${PYTHON_LIBRARIES})
