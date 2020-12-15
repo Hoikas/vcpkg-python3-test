@@ -28,7 +28,6 @@ jobs:
             triplet: x64-windows-static-md
 
         build-type: ["Debug", "Release"]
-        wrong-order: ["OFF", "ON"]
 
     env:
       VCPKG_FEATURE_FLAGS: binarycaching,manifests
