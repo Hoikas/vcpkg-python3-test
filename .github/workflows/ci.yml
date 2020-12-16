@@ -73,3 +73,7 @@ jobs:
         with:
           name: LOG ${{ runner.os }} ${{ matrix.build-type }} wrong-order=${{ matrix.wrong-order }}
           path: ${{ github.workspace }}/**/*.log
+
+      - name: List Directory Contents
+        if: always()
+        run: ls -R build
