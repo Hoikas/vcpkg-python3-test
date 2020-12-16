@@ -73,8 +73,3 @@ jobs:
         with:
           name: LOG ${{ runner.os }} ${{ matrix.build-type }} wrong-order=${{ matrix.wrong-order }}
           path: ${{ github.workspace }}/**/*.log
-
-      - name: Run Tests
-        run: |
-          cd build
-          ctest -C "${{ matrix.build-type }}"
