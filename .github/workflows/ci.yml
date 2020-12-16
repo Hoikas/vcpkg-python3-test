@@ -77,4 +77,4 @@ jobs:
       - name: Run Tests
         run: |
           cd build
-          ctest
+          ctest -C "${{ matrix.build-type }}"
