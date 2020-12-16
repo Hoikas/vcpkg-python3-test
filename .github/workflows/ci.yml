@@ -31,7 +31,6 @@ jobs:
 
     env:
       VCPKG_FEATURE_FLAGS: binarycaching,manifests
-      VCPKG_ROOT: ${{ github.workspace }}/vcpkg
       VCPKG_BINARY_SOURCES: clear;nuget,GitHub,readwrite
 
     steps:
