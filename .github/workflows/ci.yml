@@ -71,8 +71,15 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: LOG ${{ runner.os }} ${{ matrix.build-type }} wrong-order=${{ matrix.wrong-order }}
+          name: LOG ${{ runner.os }} ${{ matrix.build-type }}
           path: ${{ github.workspace }}/**/*.log
+
+      - name: Upload CMakeCache
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: CMakeCache ${{ runner.os }} ${{ matrix.build-type }}
+          path: ${{ github.workspace }}/**/CMakeCache.txt
 
       - name: List Directory Contents
         if: always()
