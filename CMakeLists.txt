@@ -19,7 +19,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 enable_testing()
 
-option(OLD_FINDERS "Build the FindPythonLibs and FindPythonInterp Test" ON)
+option(OLD_FINDERS "Build the FindPythonLibs and FindPythonInterp Test" OFF)
 option(NEW_FINDERS "Build the FindPython3 Test" ON)
 
 include(CMakeDependentOption)
