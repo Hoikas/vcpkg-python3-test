@@ -2,6 +2,9 @@
     "name": "test",
     "version-string": "dev",
     "dependencies": [
-        "python3"
+        {
+            "name": "python3",
+            "features": ["deprecated-win7-support"]
+        }
     ]
 }
