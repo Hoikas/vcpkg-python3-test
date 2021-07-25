@@ -68,9 +68,26 @@ jobs:
           mkdir build && cd build
           cmake --version
           cmake -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} \
-            -VCPKG_TARGET_TRIPLET=${{ matrix.system.triplet }} \
+            -DCMAKE_INSTALL_PREFIX="${{ github.workspace }}/build/install" \
+            -DVCPKG_TARGET_TRIPLET=${{ matrix.system.triplet }} \
+            -DX_VCPKG_APPLOCAL_DEPS_INSTALL=ON \
             ..
           cmake --build .
+
+      - name: Install (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cmake --build build --target INSTALL
+      - name: Install (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cmake --build build --target install
+
+      - name: Upload Installed Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: INSTALL ${{ runner.os }} ${{ matrix.build-type }}
+          path: ${{ github.workspace }}/build/install
 
       - name: Upload Failure Logs
         if: failure()

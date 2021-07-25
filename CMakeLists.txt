@@ -54,6 +54,9 @@ if(OLD_FINDERS)
     target_compile_definitions(test_oldfinders PRIVATE "BATTERIES=L\"${DONT_CHOKE_ON_IT}\"")
 
     add_test(NAME oldfinders COMMAND test_oldfinders)
+
+    # Test applocal install
+    install(TARGETS test_oldfinders)
 endif()
 
 #  ===========================================================================
@@ -81,4 +84,7 @@ if(NEW_FINDERS)
     target_compile_definitions(test_newfinders PRIVATE "BATTERIES=L\"${DONT_CHOKE_ON_IT}\"")
 
     add_test(NAME newfinders COMMAND test_newfinders)
+
+    # Test applocal install
+    install(TARGETS test_newfinders)
 endif()
