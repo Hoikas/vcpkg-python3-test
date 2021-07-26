@@ -68,21 +68,21 @@ jobs:
       - name: Upload Installed Artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: INSTALL ${{ runner.os }} ${{ matrix.build-type }}
+          name: INSTALL ${{ runner.os }} ${{ matrix.system.triplet }} ${{ matrix.build-type }}
           path: ${{ github.workspace }}/build/install
 
       - name: Upload Failure Logs
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: LOG ${{ runner.os }} ${{ matrix.build-type }}
+          name: LOG ${{ runner.os }} ${{ matrix.system.triplet }} ${{ matrix.build-type }}
           path: ${{ github.workspace }}/**/*.log
 
       - name: Upload CMakeCache
         if: failure()
         uses: actions/upload-artifact@v2
         with:
-          name: CMakeCache ${{ runner.os }} ${{ matrix.build-type }}
+          name: CMakeCache ${{ runner.os }} ${{ matrix.system.triplet }} ${{ matrix.build-type }}
           path: ${{ github.workspace }}/**/CMakeCache.txt
 
       - name: List Directory Contents
