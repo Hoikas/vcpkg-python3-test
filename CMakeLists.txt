@@ -56,7 +56,7 @@ if(OLD_FINDERS)
     add_test(NAME oldfinders COMMAND test_oldfinders)
 
     # Test applocal install
-    install(TARGETS test_oldfinders)
+    install(TARGETS test_oldfinders DESTINTATION test)
 endif()
 
 #  ===========================================================================
@@ -86,5 +86,5 @@ if(NEW_FINDERS)
     add_test(NAME newfinders COMMAND test_newfinders)
 
     # Test applocal install
-    install(TARGETS test_newfinders)
+    install(TARGETS test_newfinders DESTINATION test)
 endif()
