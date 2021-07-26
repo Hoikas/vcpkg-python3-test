@@ -8,30 +8,12 @@ jobs:
       fail-fast: false
       matrix:
         system:
-          - os: ubuntu-18.04
-            mono: mono
-            triplet: x64-linux
-          - os: ubuntu-20.04
-            mono: mono
-            triplet: x64-linux
-          - os: macos-10.15
-            mono: mono
-            triplet: x64-osx
-          - os: macos-11.0
-            mono: mono
-            triplet: x64-osx
           - os: windows-2016
             mono: ""
             triplet: x86-windows
-          - os: windows-2016
-            mono: ""
-            triplet: x64-windows-static
           - os: windows-2019
             mono: ""
             triplet: x64-windows
-          - os: windows-2019
-            mono: ""
-            triplet: x64-windows-static-md
 
         build-type: ["Debug", "Release"]
 
