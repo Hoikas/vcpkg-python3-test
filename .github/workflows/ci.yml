@@ -59,7 +59,7 @@ jobs:
       - name: Install (Windows)
         if: runner.os == 'Windows'
         run: |
-          cmake --build build --target INSTALL
+          cmake --build build --target INSTALL --config ${{ matrix.build-type }}
       - name: Install (Unix)
         if: runner.os != 'Windows'
         run: |
